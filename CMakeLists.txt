@@ -23,9 +23,11 @@ include(Dependency.cmake)
 # 우리 프로젝트에 include / lib 관련 옵션 추가
 target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})
 target_link_directories(${PROJECT_NAME} PUBLIC ${DEP_LIB_DIR})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS} 
+if (APPLE) #Mac OS
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS}
 "-framework CoreFoundation" "-framework CoreGraphics" "-framework CoreVideo" "-framework IOKit" "-framework APPKit"
 "-framework AudioUnit" "-framework Accelerate")
+endif () #Other
 
 	
 target_compile_definitions(${PROJECT_NAME} PUBLIC

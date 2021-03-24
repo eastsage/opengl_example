@@ -20,7 +20,12 @@ ExternalProject_Add(
 )
 # Dependency 리스트 및 라이브러리 파일 리스트 추가
 set(DEP_LIST ${DEP_LIST} dep_spdlog)
-set(DEP_LIBS ${DEP_LIBS} spdlog)
+if (APPLE) #Mac OS
+    set(DEP_LIBS ${DEP_LIBS} spdlog)
+else () #Windows
+    set(DEP_LIBS ${DEP_LIBS} spdlog$<$:d>)
+endif ()
+
 
 # glfw
 ExternalProject_Add(
