@@ -25,8 +25,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})
 target_link_directories(${PROJECT_NAME} PUBLIC ${DEP_LIB_DIR})
 if (APPLE) #Mac OS
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS}
-"-framework CoreFoundation" "-framework CoreGraphics" "-framework CoreVideo" "-framework IOKit" "-framework APPKit"
-"-framework AudioUnit" "-framework Accelerate")
+"-framework CoreFoundation" "-framework CoreGraphics" "-framework CoreVideo" "-framework IOKit" "-framework APPKit")
 endif () #Other
 
 	
