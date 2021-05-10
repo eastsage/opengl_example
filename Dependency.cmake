@@ -22,7 +22,7 @@ ExternalProject_Add(
 set(DEP_LIST ${DEP_LIST} dep_spdlog)
 if (APPLE) #Mac OS
     set(DEP_LIBS ${DEP_LIBS} spdlog)
-else (WIN32) #Windows
+elseif (WIN32) #Windows
     set(DEP_LIBS ${DEP_LIBS} spdlog$<$:d>)
 endif () #Others
 
@@ -133,7 +133,7 @@ if (APPLE) #Mac OS
         zlibstatic
         IrrXML
         )
-else (WIN32) #Windows
+elseif(WIN32) #Windows
     set(DEP_LIBS ${DEP_LIBS}
         assimp-vc142-mt$<$<CONFIG:Debug>:d>
         zlibstatic$<$<CONFIG:Debug>:d>
