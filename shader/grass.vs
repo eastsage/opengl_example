@@ -16,6 +16,5 @@ void main() {
         s, 0.0, c, 0.0,
         aOffset.x, 0.0, aOffset.z, 1.0);
     gl_Position = transform * offsetMat * vec4(aPos, 1.0);
-    gl_Position = transform * vec4(aPos, 1.0);
     texCoord = aTexCoord;
 }

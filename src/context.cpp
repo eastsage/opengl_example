@@ -72,6 +72,7 @@ void Context::MouseButton(int button, int action, double x, double y) {
 }
 
 bool Context::Init() {
+    glEnable(GL_MULTISAMPLE);
     m_box = Mesh::CreateBox();
    
     m_simpleProgram = Program::Create("./shader/simple.vs", "./shader/simple.fs");
@@ -193,7 +194,7 @@ void Context::Render() {
     }
     ImGui::End();
 
-    m_framebuffer->Bind();
+    // m_framebuffer->Bind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -327,15 +328,15 @@ void Context::Render() {
     glDrawElementsInstanced(GL_TRIANGLES, m_plane->GetIndexBuffer()->GetCount(),
         GL_UNSIGNED_INT, 0, m_grassPosBuffer->GetCount());
 
-    Framebuffer::BindToDefault();
+    // Framebuffer::BindToDefault();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    m_postProgram->Use();
-    m_postProgram->SetUniform("transform",
-        glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f)));
-    m_framebuffer->GetColorAttachment()->Bind();
-    m_postProgram->SetUniform("tex", 0);
-    m_postProgram->SetUniform("gamma", m_gamma);
-    m_plane->Draw(m_postProgram.get());
+    // m_postProgram->Use();
+    // m_postProgram->SetUniform("transform",
+    //     glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f)));
+    // m_framebuffer->GetColorAttachment()->Bind();
+    // m_postProgram->SetUniform("tex", 0);
+    // m_postProgram->SetUniform("gamma", m_gamma);
+    // m_plane->Draw(m_postProgram.get());
 }
