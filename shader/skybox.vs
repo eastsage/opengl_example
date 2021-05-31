@@ -6,6 +6,6 @@ out vec3 texCoord;
 uniform mat4 transform;
 
 void main() {
-  texCoord = aPos;
-  gl_Position = transform * vec4(aPos, 1.0);
+    texCoord = aPos;
+    gl_Position = transform * vec4(aPos, 1.0);
 }

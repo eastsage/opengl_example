@@ -24,7 +24,6 @@ bool Image::Allocate(int width, int height, int channelCount) {
     return m_data ? true : false;
 }
 
-
 Image::~Image() {
     if (m_data) {
         stbi_image_free(m_data);

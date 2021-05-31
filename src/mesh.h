@@ -11,6 +11,7 @@ struct Vertex {
     glm::vec3 position;
     glm::vec3 normal;
     glm::vec2 texCoord;
+    glm::vec3 tangent;
 };
 
 CLASS_PTR(Material);
@@ -36,10 +37,12 @@ public:
         const std::vector<Vertex>& vertices,
         const std::vector<uint32_t>& indices,
         uint32_t primitiveType);
-    static MeshUPtr CreateBox();
+    static MeshUPtr CreateBox();	
     static MeshUPtr CreatePlane();
 
-    const VertexLayout* GetVertexLayout() const { return m_vertexLayout.get(); }
+    const VertexLayout* GetVertexLayout() const {
+        return m_vertexLayout.get();
+    }
     BufferPtr GetVertexBuffer() const { return m_vertexBuffer; }
     BufferPtr GetIndexBuffer() const { return m_indexBuffer; }
 
@@ -47,6 +50,8 @@ public:
     MaterialPtr GetMaterial() const { return m_material; }
 
     void Draw(const Program* program) const;
+
+    static void ComputeTangents(std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
 private:
     Mesh() {}

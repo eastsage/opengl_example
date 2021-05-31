@@ -1,7 +1,8 @@
-#include "context.h"
+#include"context.h"
+
 #include <spdlog/spdlog.h>
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>	
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
@@ -49,15 +50,10 @@ void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
     ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 }
 
-void Render() {
-    glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-int main(int argc, const char** argv) {
+int main(int argc, const char** argy) {
     SPDLOG_INFO("Start program");
 
-    // glfw 라이브러리 초기화, 실패하면 에러 출력후 종료
+        // glfw 라이브러리 초기화, 실패하면 에러 출력후 종료
     SPDLOG_INFO("Initialize glfw");
     if (!glfwInit()) {
         const char* description = nullptr;
@@ -65,7 +61,7 @@ int main(int argc, const char** argv) {
         SPDLOG_ERROR("failed to initialize glfw: {}", description);
         return -1;
     }
-
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -79,7 +75,7 @@ int main(int argc, const char** argv) {
         SPDLOG_ERROR("failed to create glfw window");
         glfwTerminate();
         return -1;
-    }
+    }	
     glfwMakeContextCurrent(window);
 
     // glad를 활용한 OpenGL 함수 로딩
@@ -108,35 +104,34 @@ int main(int argc, const char** argv) {
 
     OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
-    glfwSetKeyCallback(window, OnKeyEvent);
+    glfwSetKeyCallback(window, OnKeyEvent);   	
     glfwSetCharCallback(window, OnCharEvent);
     glfwSetCursorPosCallback(window, OnCursorPos);
     glfwSetMouseButtonCallback(window, OnMouseButton);
     glfwSetScrollCallback(window, OnScroll);
 
-        // glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
+    // glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
     SPDLOG_INFO("Start main loop");
     while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+        glfwPollEvents();	
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
         context->ProcessInput(window);
         context->Render();
-        
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
     }
-    context.reset(); // context = nullptr;
-
-    	
+    context.reset();
+ 
     ImGui_ImplOpenGL3_DestroyFontsTexture();
     ImGui_ImplOpenGL3_DestroyDeviceObjects();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext(imguiContext);
-
+    
     glfwTerminate();
     return 0;
 }
