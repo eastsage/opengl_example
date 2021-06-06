@@ -1,9 +1,9 @@
 #include "framebuffer.h"
 
-FramebufferUPtr Framebuffer::Create(const TexturePtr colorAttachment) {
+FramebufferUPtr Framebuffer::Create(
+    const std::vector<TexturePtr>& colorAttachments) {
     auto framebuffer = FramebufferUPtr(new Framebuffer());
-    if (!framebuffer->InitWithColorAttachment(colorAttachment))
-        return nullptr;
+    if (!framebuffer->InitWithColorAttachments(colorAttachments)) return nullptr;
     return std::move(framebuffer);
 }
 
@@ -18,26 +18,38 @@ Framebuffer::~Framebuffer() {
 
 void Framebuffer::BindToDefault() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
 }
 
 void Framebuffer::Bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
 }
-
-bool Framebuffer::InitWithColorAttachment(const TexturePtr colorAttachment) {
-    m_colorAttachment = colorAttachment;
+	
+bool Framebuffer::InitWithColorAttachments(const std::vector<TexturePtr>& colorAttachments) {
+    m_colorAttachments = colorAttachments;
     glGenFramebuffers(1, &m_framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
 
+    for (size_t i = 0; i < m_colorAttachments.size(); i++) {
     glFramebufferTexture2D(GL_FRAMEBUFFER,
-        GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-        colorAttachment->Get(), 0);
+        GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D,
+        m_colorAttachments[i]->Get(), 0);
+    }
+ 
+    if (m_colorAttachments.size() > 0) {
+        std::vector<GLenum> attachments;
+        attachments.resize(m_colorAttachments.size());
+        for (size_t i = 0; i < m_colorAttachments.size(); i++)
+            attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+        glDrawBuffers(m_colorAttachments.size(), attachments.data());
+    }
+ 
+    int width = m_colorAttachments[0]->GetWidth();
+    int height = m_colorAttachments[0]->GetHeight();
 
     glGenRenderbuffers(1, &m_depthStencilBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBuffer);
-    glRenderbufferStorage(
-        GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-        colorAttachment->GetWidth(), colorAttachment->GetHeight());
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBuffer);	
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glFramebufferRenderbuffer(

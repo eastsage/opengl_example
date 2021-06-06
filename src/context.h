@@ -98,6 +98,29 @@ private:
 
     int m_width {WINDOW_WIDTH};
     int m_height {WINDOW_HEIGHT};
+
+    // deferred shading
+    FramebufferUPtr m_deferGeoFramebuffer;
+    ProgramUPtr m_deferGeoProgram;
+    ProgramUPtr m_deferLightProgram;
+
+    struct DeferLight {
+        glm::vec3 position;
+        glm::vec3 color;
+    };
+    std::vector<DeferLight> m_deferLights;
+
+    // ssao
+    FramebufferUPtr m_ssaoFramebuffer;
+    ProgramUPtr m_ssaoProgram;
+    ModelUPtr m_model;  // for test rendering
+    TextureUPtr m_ssaoNoiseTexture;
+    std::vector<glm::vec3> m_ssaoSamples;
+    float m_ssaoRadius { 1.0f };
+
+    ProgramUPtr m_blurProgram;
+    FramebufferUPtr m_ssaoBlurFramebuffer;
+    bool m_useSsao { true };
 };
 
 #endif // __CONTEXT_H__
